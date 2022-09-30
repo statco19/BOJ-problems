@@ -14,10 +14,11 @@ int dp[1001];
 
 void sol() {
 	dp[1] = arr[1];
+	ans = dp[1];
 	for(int i=2;i<=N;++i) {
 		dp[i] = max(dp[i-1]+arr[i], arr[i]);
+		ans = dp[i] > ans ? dp[i] : ans;
 	}
-	ans = *max_element(dp,dp+(N+1));
 	cout << ans << '\n';
 }
  
