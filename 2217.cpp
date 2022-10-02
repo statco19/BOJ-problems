@@ -21,7 +21,7 @@ void sol() {
 			ans = arr[i] * (N-i);
 		}
 	}
-	cout << ans << '\n';
+	cout << ans << '\n'; 
 
 	return;
 }
