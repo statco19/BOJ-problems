@@ -22,6 +22,7 @@ void sol() {
 		dp[i][1] = dp[i-1][0] % mod + dp[i-1][2] % mod;
 		dp[i][2] = dp[i-1][0] % mod + dp[i-1][1] % mod;
 	}
+	
 	int ans = (dp[N][0] % mod + dp[N][1] % mod + dp[N][2] % mod) % mod;
 	cout << ans << '\n'; 
 
