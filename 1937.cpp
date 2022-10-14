@@ -22,7 +22,7 @@ int ans;
 int dfs(int r, int c) {
 	if(dp[r][c]) return dp[r][c];
 
-	int cnt = 1;
+	int cnt = 1; 
 	for(int d=0;d<4;++d) {
 		int tmp = 1;
 		int nr = r + di4[d];
