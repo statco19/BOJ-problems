@@ -10,38 +10,40 @@ typedef pair<int,int> pii;
 typedef vector<int> vint;
 const int INF = 0x3f3f3f3f; const int mINF = 0xc0c0c0c0;
 const ll LINF = 0x3f3f3f3f3f3f3f3f; const ll mLINF = 0xc0c0c0c0c0c0c0c0;
+int T = 1;
 
-string s1,s2;
-int ans;
-int c[1001][1001];
+string s,t;
+int dp[1001][1001];
 
 void sol() {
-	for(int i=0;i<=s1.size();++i) {
-		c[i][s2.size()] = s1.size() - i;
+	cin >> s >> t;
+	for(int i=0;i<=s.size();++i) {
+		dp[i][t.size()] = s.size() - i;
 	}
-	for(int j=0;j<=s2.size();++j) {
-		c[s1.size()][j] = s2.size() - j;
+	for(int j=0;j<=t.size();++j) {
+		dp[s.size()][j] = t.size() - j;
 	}
 
-	for(int i=s1.size()-1; ~i; --i) {
-		for(int j=s2.size()-1; ~j; --j) {
-			if(s1[i] == s2[j]) {
-				c[i][j] = c[i+1][j+1];
+	for(int i=s.size()-1; ~i; --i) {
+		for(int j=t.size()-1; ~j; --j) {
+			if(s[i] ^ t[j]) {
+				dp[i][j] = min({dp[i][j+1], dp[i+1][j], dp[i+1][j+1]}) + 1;
 			} else {
-				c[i][j] = min({c[i][j+1], c[i+1][j], c[i+1][j+1]}) + 1;
+				dp[i][j] = dp[i+1][j+1];  // no edit
 			}
 		}
 	}
-	ans = c[0][0];
-	cout << ans << '\n';
+	cout << dp[0][0] << '\n';
 
 	return;
 }
 
 int main() {
 	ios_base::sync_with_stdio(0); cin.tie(0);
-	cin >> s1 >> s2;
-	sol();
+
+	while(T--) {
+		sol();
+	}
 
 	return 0;
 }
