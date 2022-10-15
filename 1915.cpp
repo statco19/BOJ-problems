@@ -38,14 +38,6 @@ void sol() {
 
 	for(int i=1;i<=n;++i) {
 		for(int j=1;j<=m;++j) {
-			printf("%d ", dp[i][j]);
-		}
-		printf("\n");
-	}
-	printf("\n");
-
-	for(int i=1;i<=n;++i) {
-		for(int j=1;j<=m;++j) {
 			ans = max(ans, dp[i][j]);
 		}
 	}
@@ -55,8 +47,6 @@ void sol() {
 }
 
 int main() {
-	// ios_base::sync_with_stdio(0); cin.tie(0);
-
 	while(T--) {
 		sol();
 	}
