@@ -32,13 +32,13 @@ void sol() {
 				return;
 			}
 		} else if(b&1^1) {
-			b /= 2;
+			b >>= 1;
 			ans++;
 		}
 	}
 	ans++;
 
-	if(b != a) ans = -1;
+	if(b ^ a) ans = -1;
 	cout << ans << '\n';
 
 	return;
