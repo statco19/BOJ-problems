@@ -35,6 +35,7 @@ void sol() {
 			}
 		}
 	}
+	
 	ans = o < z ? o : z;
 	cout << ans << '\n';
 
