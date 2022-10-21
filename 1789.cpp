@@ -95,7 +95,6 @@ void sol() {
 		sum += i++;
 		N++;
 	}
-
 	cout << N-1 << en;
 
 	return;
