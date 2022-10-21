@@ -1,9 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-typedef long long ll;
-typedef pair<ll, ll> pll;
-typedef pair<int, int> pii;
 #define vt vector
 #define ll long long
 #define pb push_back
@@ -13,6 +10,8 @@ typedef pair<int, int> pii;
 #define vi vector<int>
 #define vvi vector<vector<int>>
 #define vll vector<long long>
+#define pii pair<int, int>
+#define pll pair<ll, ll>
 #define en '\n'
 #define ioa insert_or_assign
 #define umap unordered_map
@@ -85,9 +84,9 @@ const int INF = 0x3f3f3f3f; const int mINF = 0xc0c0c0c0;
 const ll LINF = 0x3f3f3f3f3f3f3f3f; const ll mLINF = 0xc0c0c0c0c0c0c0c0;
 int T = 1;
 
-int N;
 
 void sol() {
+	
 
 	return;
 }
