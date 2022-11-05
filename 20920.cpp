@@ -126,7 +126,6 @@ void sol() {
 
 	vt<pair<string,int>> v;
 	EACH(word,cnt,um) {
-		// cout << word << ' ' << cnt << en;
 		v.pb({word,cnt});
 	}
 
