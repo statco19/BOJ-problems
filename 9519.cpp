@@ -125,7 +125,6 @@ void sol() {
 	} else {
 		cout << v.back() << en;
 	}
-
 	return;
 }
 
