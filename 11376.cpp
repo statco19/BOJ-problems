@@ -122,16 +122,10 @@ void sol() {
     }
 
     FOR(i,1,N+1) {
-        // cout << "i: " << i << en;
         FOR(j,2) {
             memset(c,0,sizeof(c));
             if(dfs(i)) ans++;
         }
-
-        // FOR(j,1,M+1) {
-        //     cout << d[j] << ' ';
-        // }
-        // cout << en;
     }
 
     cout << ans << en;
