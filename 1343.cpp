@@ -123,7 +123,6 @@ void sol() {
                     continue;
                 }
             }
-            // cout << s << en;
             cout << -1 << en;
             return;
         } else {
