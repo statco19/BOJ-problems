@@ -8,6 +8,7 @@ using namespace std;
 #define all(c) (c).begin(), (c).end()
 #define rev(c) (c).rbegin(), (c).rend()
 #define sz(x) (int)(x).size()
+#define mset(ar, val) memset(ar, val, sizeof(ar))
 #define vi vector<int>
 #define vvi vector<vector<int>>
 #define vll vector<long long>
@@ -87,37 +88,38 @@ const int INF = 0x3f3f3f3f; const int mINF = 0xc0c0c0c0;
 const ll LINF = 0x3f3f3f3f3f3f3f3f; const ll mLINF = 0xc0c0c0c0c0c0c0c0;
 int T = 1;
 
+const int mod = 1e9+7;
 int L;
 ll dp[5001];
-const int mod = 1e9 + 7;
 
 void sol() {
-	cin >> L;
-	if(L&1) {
-		cout << 0 << en;
-		return;
-	}
-	memset(dp,0,sizeof(dp));	
-	dp[0] = 1;
-	dp[2] = 1;
+    cin >> L;
+    if(L&1) {
+        cout << 0 << en;
+        return;
+    }
 
-	FOR(i,4,L+1,2) {
-		FOR(j,2,i+1,2) {
-			dp[i] = dp[i] % mod + (dp[j-2] % mod * dp[i-j] % mod) % mod;
-		}
-	}
+    mset(dp,0);
+    dp[0] = 1LL;
+    dp[2] = 1LL;
 
-	cout << dp[L] % mod << en;
+    FOR(i,4,L+1,2) {
+        FOR(j,0,i-1,2) {
+            dp[i] = dp[i]%mod + (dp[j]%mod * dp[i-2-j]%mod)%mod;
+        }
+    }
 
-	return;
+    cout << dp[L] % mod << en;
+
+    return;
 }
 
 int main() {
-	ios_base::sync_with_stdio(0); cin.tie(0);
-	cin >> T;
-	while(T--) {
-		sol();
-	}
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    cin >> T;
+    while(T--) {
+        sol();
+    }
 
-	return 0;
+    return 0;
 }
