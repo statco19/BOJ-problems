@@ -4,9 +4,11 @@ using namespace std;
 #define vt vector
 #define ll long long
 #define pb push_back
+#define pf push_front
 #define all(c) (c).begin(), (c).end()
 #define rev(c) (c).rbegin(), (c).rend()
 #define sz(x) (int)(x).size()
+#define mset(ar, val) memset(ar, val, sizeof(ar))
 #define vi vector<int>
 #define vvi vector<vector<int>>
 #define vll vector<long long>
@@ -16,6 +18,8 @@ using namespace std;
 #define ioa insert_or_assign
 #define umap unordered_map
 #define prq priority_queue
+#define F first
+#define S second
 
 #define F_OR(i, a, b, s) for (int i=(a); (s)>0?i<(b):i>(b); i+=(s))
 #define F_OR1(e) F_OR(i, 0, e, 1)
@@ -84,44 +88,43 @@ const int INF = 0x3f3f3f3f; const int mINF = 0xc0c0c0c0;
 const ll LINF = 0x3f3f3f3f3f3f3f3f; const ll mLINF = 0xc0c0c0c0c0c0c0c0;
 int T = 1;
 
-int N;
-int dp[2][100001];
-vi a,b;
-
 void sol() {
-	cin >> N;
-	int sumB = 0;
-	int ans = INF;
-	memset(dp,0,sizeof(dp));
-	a.clear(); b.clear();
-	a.resize(N+1); b.resize(N+1);
-	FOR(i,1,N+1) {
-		cin >> a[i] >> b[i];
-		sumB += b[i];
-	}
+    int N;
+    int sum = 0;
+    cin >> N;
 
-	FOR(i,1,N+1) {
-		FOR(j,1,100001) {
-			if(j < a[i]) {
-				dp[i%2][j] = dp[(i-1)%2][j];
-			} else {
-				dp[i%2][j] = max(dp[(i-1)%2][j], dp[(i-1)%2][j-a[i]] + b[i]);
-			}
-			ans = min(ans, max(j, sumB - dp[i%2][j]));
-		}
-	}
+    int dp[2][100001];
+    mset(dp,0);
+    vt<int> a(N+1);
+    vt<int> b(N+1);
+    FOR(i,1,N+1) {
+        cin >> a[i] >> b[i];
+        sum += b[i];
+    }
 
-	cout << ans << en;
+    int ans = INF;
+    FOR(i,1,N+1) {
+        FOR(j,1,100001) {
+            if(j < a[i]) {
+                dp[i%2][j] = dp[(i-1)%2][j];
+            } else {
+                dp[i%2][j] = max(dp[(i-1)%2][j], dp[(i-1)%2][j-a[i]] + b[i]);
+            }
+            ans = min(ans, max(j, sum - dp[i%2][j]));  // j: oven 1 time, sum-dp[i][j]: oven 2 time
+        }
+    }
 
-	return;
+    cout << ans << en;
+
+    return;
 }
 
 int main() {
-	ios_base::sync_with_stdio(0); cin.tie(0);
-	cin >> T;
-	while(T--) {
-		sol();
-	}
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    cin >> T;
+    while(T--) {
+        sol();
+    }
 
-	return 0;
+    return 0;
 }
