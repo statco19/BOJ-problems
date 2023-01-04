@@ -109,12 +109,6 @@ void sol() {
         }
     }
 
-    // FOR(i,2) {
-    //     FOR(j,0,N+1) {
-    //         cout << dp[i][j] << ' ';
-    //     }
-    //     cout << en;
-    // }
     cout << min(dp[0][N], dp[1][N]) << en;
 
     return;
