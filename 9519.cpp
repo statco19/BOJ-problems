@@ -114,6 +114,7 @@ void sol() {
     }
 
     int y = cnt;
+    
     if(x%y == 0) cout << v[0] << en;
     else cout << v[cnt - x%y] << en;
 
