@@ -8,6 +8,7 @@ using namespace std;
 #define all(c) (c).begin(), (c).end()
 #define rev(c) (c).rbegin(), (c).rend()
 #define sz(x) (int)(x).size()
+#define mset(ar, val) memset(ar, val, sizeof(ar))
 #define vi vector<int>
 #define vvi vector<vector<int>>
 #define vll vector<long long>
@@ -36,22 +37,22 @@ using namespace std;
 #define EACH(...) E_ACHC(__VA_ARGS__)(__VA_ARGS__)
 
 string to_string(char c) {
-	return string(1, c);
+    return string(1, c);
 }
 string to_string(bool b) {
-	return b?"true":"false";
+    return b?"true":"false";
 }
 string to_string(const char* s) {
-	return string(s);
+    return string(s);
 }
 string to_string(string s) {
-	return s;
+    return s;
 }
 string to_string(vt<bool> v) {
-	string res;
-	FOR(sz(v))
-		res+=char('0'+v[i]);
-	return res;
+    string res;
+    FOR(sz(v))
+        res+=char('0'+v[i]);
+    return res;
 }
 
 vector<string> split (const string &s, char delim) {
@@ -87,53 +88,44 @@ const int INF = 0x3f3f3f3f; const int mINF = 0xc0c0c0c0;
 const ll LINF = 0x3f3f3f3f3f3f3f3f; const ll mLINF = 0xc0c0c0c0c0c0c0c0;
 int T = 1;
 
-int X;
-string s;
-umap<string, int> um;
-vt<string> v;
-
 void sol() {
-	cin >> X >> s;
-	int N = sz(s);
-	int cnt = 0;
-	v.pb(s);
-	um.ioa(s,cnt);
-	while(X--) {
-		cnt++;
-		string h="", t="";
-		int i=0;
-		for(;i<sz(s);++i) {
-			if(i&1) {
-				t += s[i];
-			} else {
-				h += s[i];
-			}
-		}
-		string r(rev(t));
-		s = h + r;
+    umap<string, int> um;
+    string s;
+    int x;
+    cin >> x;
+    cin >> s;
 
-		if(um.find(s) == um.end()) {
-			um.ioa(s,cnt);
-			v.pb(s);
-		} else {
-			break;
-		}
-	}
+    int cnt = 0;
+    vt<string> v;
+    while(um.find(s) == um.end()) {
+        um[s] = cnt++;
+        v.pb(s);
+        string t = "";
+        int l = 0, r = sz(s)-1;
+        while(l<=r) {
+            if(l == r) t += s[l];
+            else {
+                t += s[l];
+                t += s[r];
+            }
+            l++; r--;
+        }
+        s = t;
+    }
 
-	if(X > 0) {
-		cout << v[X % cnt] << en;
-	} else {
-		cout << v.back() << en;
-	}
-	return;
+    int y = cnt;
+    if(x%y == 0) cout << v[0] << en;
+    else cout << v[cnt - x%y] << en;
+
+    return;
 }
 
 int main() {
-	ios_base::sync_with_stdio(0); cin.tie(0);
+    ios_base::sync_with_stdio(0); cin.tie(0);
 
-	while(T--) {
-		sol();
-	}
+    while(T--) {
+        sol();
+    }
 
-	return 0;
+    return 0;
 }
