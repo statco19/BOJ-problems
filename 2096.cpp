@@ -1,62 +1,148 @@
 #include <bits/stdc++.h>
+using namespace std;
 
+#define vt vector
 #define ll long long
 #define pb push_back
+#define pf push_front
+#define all(c) (c).begin(), (c).end()
+#define rev(c) (c).rbegin(), (c).rend()
+#define sz(x) (int)(x).size()
+#define mset(ar, val) memset(ar, val, sizeof(ar))
+#define vi vector<int>
+#define vvi vector<vector<int>>
+#define vll vector<long long>
+#define pii pair<int, int>
+#define pll pair<ll, ll>
+#define en '\n'
 #define ioa insert_or_assign
 #define umap unordered_map
 #define prq priority_queue
-using namespace std;
-typedef pair<int,int> pii;
-typedef vector<int> vint;
+#define F first
+#define S second
+
+#define F_OR(i, a, b, s) for (int i=(a); (s)>0?i<(b):i>(b); i+=(s))
+#define F_OR1(e) F_OR(i, 0, e, 1)
+#define F_OR2(i, e) F_OR(i, 0, e, 1)
+#define F_OR3(i, b, e) F_OR(i, b, e, 1)
+#define F_OR4(i, b, e, s) F_OR(i, b, e, s)
+#define GET5(a, b, c, d, e, ...) e
+#define F_ORC(...) GET5(__VA_ARGS__, F_OR4, F_OR3, F_OR2, F_OR1)
+#define FOR(...) F_ORC(__VA_ARGS__)(__VA_ARGS__)
+
+#define E_ACH2(x, a) for (auto &x : a)
+#define E_ACH3(x, y, a) for (auto &[x, y] : a)
+#define E_ACH4(x, y, z, a) for (auto &[x, y, z] : a)
+#define E_ACHC(...) GET5(__VA_ARGS__, E_ACH4, E_ACH3, E_ACH2)
+#define EACH(...) E_ACHC(__VA_ARGS__)(__VA_ARGS__)
+
+string to_string(char c) {
+    return string(1, c);
+}
+string to_string(bool b) {
+    return b?"true":"false";
+}
+string to_string(const char* s) {
+    return string(s);
+}
+string to_string(string s) {
+    return s;
+}
+string to_string(vt<bool> v) {
+    string res;
+    FOR(sz(v))
+        res+=char('0'+v[i]);
+    return res;
+}
+
+vector<string> split (const string &s, char delim) {
+    vector<string> result;
+    stringstream ss (s);
+    string item;
+
+    while (getline (ss, item, delim)) {
+        result.push_back (item);
+    }
+
+    return result;
+}
+
+vector<string> split (const string &s, string delimiter) {
+    size_t pos_start = 0, pos_end, delim_len = delimiter.length();
+    string token;
+    vector<string> res;
+
+    while ((pos_end = s.find (delimiter, pos_start)) != string::npos) {
+        token = s.substr (pos_start, pos_end - pos_start);
+        pos_start = pos_end + delim_len;
+        res.push_back (token);
+    }
+
+    res.push_back (s.substr (pos_start));
+    return res;
+}
+
+const int d4r[4] = {-1,0,1,0}; const int d4c[4] = {0,1,0,-1};
+const int d8r[8] = {-1,-1,0,1,1,1,0,-1}; const int d8c[8] = {0,1,1,1,0,-1,-1,-1};
 const int INF = 0x3f3f3f3f; const int mINF = 0xc0c0c0c0;
 const ll LINF = 0x3f3f3f3f3f3f3f3f; const ll mLINF = 0xc0c0c0c0c0c0c0c0;
 int T = 1;
 
 int N;
-int dp_max[2][5], dp_min[2][5], arr[100001][5];
+int arr[100001][4];
+int dp[3][4];
 
 void sol() {
-	cin >> N;
+    cin >> N;
+    for (int i = 0; i < N; ++i) {
+        for (int j = 1; j <= 3; ++j) {
+            cin >> arr[i][j];
+        }
+    }
 
-	memset(dp_min, INF, sizeof(dp_min));
-	memset(dp_max, mINF, sizeof(dp_max));
-	for(int i=1;i<=N;++i) {
-		for(int j=1;j<=3;++j) {
-			cin >> arr[i][j];
-		}
-	}
-	for(int j=1;j<=3;++j) {
-		dp_max[0][j] = 0;
-		dp_min[0][j] = 0;
-	}
+    // max
+    for (int j = 1; j <= 3; ++j) dp[0][j] = arr[0][j];
+    for (int i = 1; i < N; ++i) {
+        if (i % 2) {
+            dp[i % 2][1] = arr[i][1] +  max(dp[(i % 2) - 1][1], dp[(i % 2) - 1][2]);
+            dp[i % 2][2] = arr[i][2] + max({ dp[(i % 2) - 1][1], dp[(i % 2) - 1][2], dp[(i % 2) - 1][3] });
+            dp[i % 2][3] = arr[i][3] + max(dp[(i % 2) - 1][2], dp[(i % 2) - 1][3]);
+        }
+        else {
+            dp[i % 2][1] = arr[i][1] + max(dp[(i % 2) + 1][1], dp[(i % 2) + 1][2]);
+            dp[i % 2][2] = arr[i][2] + max({ dp[(i % 2) + 1][1], dp[(i % 2) + 1][2], dp[(i % 2) + 1][3] });
+            dp[i % 2][3] = arr[i][3] + max(dp[(i % 2) + 1][2], dp[(i % 2) + 1][3]);
+        }
+    }
 
-	for(int i=1;i<=N;++i) {
-		for(int j=1;j<=3;++j) {
-			dp_max[1][j] = arr[i][j] + max({dp_max[0][j-1], dp_max[0][j], dp_max[0][j+1]});
-			dp_min[1][j] = arr[i][j] + min({dp_min[0][j-1], dp_min[0][j], dp_min[0][j+1]});
-		}
-		for(int j=1;j<=3;++j) {
-			dp_max[0][j] = dp_max[1][j];
-			dp_min[0][j] = dp_min[1][j];
-		}
-	}
+    cout << max({ dp[(N - 1) % 2][1], dp[(N - 1) % 2][2], dp[(N - 1) % 2][3] }) << ' ';
 
-	int mnN = INF, mxN = mINF;
-	for(int j=1;j<=3;++j) {
-		mnN = dp_min[1][j] < mnN ? dp_min[1][j] : mnN;
-		mxN = dp_max[1][j] > mxN ? dp_max[1][j] : mxN;
-	}
-	cout << mxN << ' ' << mnN << '\n';
+    // min
+    memset(dp, 0, sizeof(dp));
+    for (int j = 1; j <= 3; ++j) dp[0][j] = arr[0][j];
+    for (int i = 1; i < N; ++i) {
+        if (i % 2) {
+            dp[i % 2][1] = arr[i][1] + min(dp[(i % 2) - 1][1], dp[(i % 2) - 1][2]);
+            dp[i % 2][2] = arr[i][2] + min({ dp[(i % 2) - 1][1], dp[(i % 2) - 1][2], dp[(i % 2) - 1][3] });
+            dp[i % 2][3] = arr[i][3] + min(dp[(i % 2) - 1][2], dp[(i % 2) - 1][3]);
+        }
+        else {
+            dp[i % 2][1] = arr[i][1] + min(dp[(i % 2) + 1][1], dp[(i % 2) + 1][2]);
+            dp[i % 2][2] = arr[i][2] + min({ dp[(i % 2) + 1][1], dp[(i % 2) + 1][2], dp[(i % 2) + 1][3] });
+            dp[i % 2][3] = arr[i][3] + min(dp[(i % 2) + 1][2], dp[(i % 2) + 1][3]);
+        }
+    }
 
-	return;
+    cout << min({ dp[(N - 1) % 2][1], dp[(N - 1) % 2][2], dp[(N - 1) % 2][3] }) << en;
+    return;
 }
 
 int main() {
-	ios_base::sync_with_stdio(0); cin.tie(0);
+    ios_base::sync_with_stdio(0); cin.tie(0);
 
-	while(T--) {
-		sol();
-	}
+    while(T--) {
+        sol();
+    }
 
-	return 0;
+    return 0;
 }
