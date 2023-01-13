@@ -37,22 +37,22 @@ using namespace std;
 #define EACH(...) E_ACHC(__VA_ARGS__)(__VA_ARGS__)
 
 string to_string(char c) {
-	return string(1, c);
+    return string(1, c);
 }
 string to_string(bool b) {
-	return b?"true":"false";
+    return b?"true":"false";
 }
 string to_string(const char* s) {
-	return string(s);
+    return string(s);
 }
 string to_string(string s) {
-	return s;
+    return s;
 }
 string to_string(vt<bool> v) {
-	string res;
-	FOR(sz(v))
-		res+=char('0'+v[i]);
-	return res;
+    string res;
+    FOR(sz(v))
+        res+=char('0'+v[i]);
+    return res;
 }
 
 vector<string> split (const string &s, char delim) {
@@ -88,24 +88,34 @@ const int INF = 0x3f3f3f3f; const int mINF = 0xc0c0c0c0;
 const ll LINF = 0x3f3f3f3f3f3f3f3f; const ll mLINF = 0xc0c0c0c0c0c0c0c0;
 int T = 1;
 
-void sol() {
-    int N;
-    int ar[101] = {0};
-    ll dp[101][21] = {0};
-    cin >> N;
-    FOR(i,1,N+1) cin >> ar[i];
+ll dp[101][21];
+vt<int> v;
+int N;
 
-    dp[1][ar[1]]++;
-    FOR(i,2,N) {
-        FOR(j,0,21) {
+void sol() {
+    cin >> N;
+    v.resize(N+1);
+    for(int i=1; i<=N; ++i) cin >> v[i];
+    
+    // dp[i][j] : max # cases given that upto i-th number is chosen and the sum equals j
+    dp[1][v[1]] = 1;
+    for(int i=2; i<N; ++i) {
+        for(int j=0; j<=20; ++j) {
             if(dp[i-1][j]) {
-                if(j + ar[i] <= 20) dp[i][j+ar[i]] += dp[i-1][j];
-                if(j - ar[i] >= 0) dp[i][j-ar[i]] += dp[i-1][j];
+                int sum1 = j + v[i];
+                int sum2 = j - v[i];
+                
+                if(sum1 <= 20) {
+                    dp[i][sum1] += dp[i-1][j];
+                }
+                if(sum2 >= 0) {
+                    dp[i][sum2] += dp[i-1][j];
+                }
             }
         }
     }
-
-    cout << dp[N-1][ar[N]] << en;
+    
+    cout << dp[N-1][v[N]] << en;
 
     return;
 }
