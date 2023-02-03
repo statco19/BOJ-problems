@@ -14,7 +14,6 @@ const int INF = 0x3f3f3f3f; const int mINF = 0xc0c0c0c0;
 const ll LINF = 0x3f3f3f3f3f3f3f3f; const ll mLINF = 0xc0c0c0c0c0c0c0c0;
 int T = 1;
 
-const int mx = 1e5;
 int N,M,k;
 typedef struct query {
 	int idx, s, e;
@@ -27,30 +26,9 @@ typedef struct query {
 vt<int> v;
 vt<Query> qr;
 vt<int> ans;
-int t[2*mx];
-
-void init() {
-	for(int i=mx-1; i>0; --i) t[i] = max(t[i<<1], t[i<<1|1]);
-}
-
-void update(int p, int val) {
-	for(t[p+=mx]+=val; p>1; p>>=1) t[p>>1] = max(t[p], t[p^1]);
-}
-
-int qry(int l, int r) {
-	int res = mINF;
-	for(l+=mx, r+=mx; l<r; l>>=1, r>>=1) {
-		if(l&1) {
-			int tmp = t[l++];
-			res = max(res, tmp);
-		}
-		if(r&1) {
-			int tmp = t[--r];
-			res = max(res, tmp);
-		}
-	}
-	return res;
-}
+int ccnt[100001];
+int cnt[100001];
+int mx;
 
 void sol() {
 	cin >> N;
@@ -72,40 +50,51 @@ void sol() {
 
 	sort(all(qr));
 
+	ccnt[0] = N;
 	int l = qr[0].s, r = qr[0].e;
 	for(int i=l; i<=r; ++i) {
-		t[v[i]-1+mx]++;
+		ccnt[cnt[v[i]]]--;
+		cnt[v[i]]++;
+		ccnt[cnt[v[i]]]++;
+		mx = max(mx, cnt[v[i]]);
 	}
-	init();
-	ans[qr[0].idx] = qry(0,mx);
+	ans[qr[0].idx] = mx;
 
 	int s,e;
 	for(int i=1; i<M; ++i) {
 		s = qr[i].s;
 		e = qr[i].e;
 
-		vt<pii> revised;
 		while(s < l) {
-			--l;
-			revised.pb({v[l],1});
+			l--;
+			ccnt[cnt[v[l]]]--;
+			cnt[v[l]]++;
+			ccnt[cnt[v[l]]]++;
+			mx = max(mx, cnt[v[l]]);
 		}
 		while(s > l) {
-			revised.pb({v[l],-1});
+			ccnt[cnt[v[l]]]--;
+			cnt[v[l]]--;
+			ccnt[cnt[v[l]]]++;
 			l++;
+			if(ccnt[mx] == 0) mx--;
 		}
 		while(e < r) {
-			revised.pb({v[r],-1});
+			ccnt[cnt[v[r]]]--;
+			cnt[v[r]]--;
+			ccnt[cnt[v[r]]]++;
 			r--;
+			if(ccnt[mx] == 0) mx--;
 		}
 		while(e > r) {
-			++r;
-			revised.pb({v[r],1});
+			r++;
+			ccnt[cnt[v[r]]]--;
+			cnt[v[r]]++;
+			ccnt[cnt[v[r]]]++;
+			mx = max(mx, cnt[v[r]]);
 		}
 
-		for(pii p : revised) {
-			update(p.first-1, p.second);  // sqrt(N) * lgN
-		}
-		ans[qr[i].idx] = qry(0,mx);
+		ans[qr[i].idx] = mx;
 	}
 
 	for(int x : ans) cout << x << en;
