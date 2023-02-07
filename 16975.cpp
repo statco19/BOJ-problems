@@ -8,7 +8,6 @@
 #define pii pair<int,int>
 #define sz(x) (x).size()
 #define all(x) (x).begin(), (x).end()
-#define mid (st+end)/2
 
 using namespace std;
 const int INF = 0x3f3f3f3f; const int mINF = 0xc0c0c0c0;
@@ -16,92 +15,48 @@ const ll LINF = 0x3f3f3f3f3f3f3f3f; const ll mLINF = 0xc0c0c0c0c0c0c0c0;
 int T = 1;
 
 int N,M;
-ll arr[100001];
-ll tree[400004];
-ll lazy[400004];
+ll ar[100001];
+ll t[100001];
 
-void init(int node, int st, int end) {
-	if(st == end) {
-		tree[node] = arr[st];
-	} else {
-		init(node*2, st, mid);
-		init(node*2+1, mid+1, end);
-		tree[node] = tree[node*2] + tree[node*2+1];
+void update(int p, ll val) {
+	while(p<=N) {
+		t[p] += val;
+		p += p & -p;
 	}
-	return;
 }
 
-void update_lazy(int node, int st, int end) {
-	if(lazy[node] != 0) {
-		tree[node] += (end-st+1)*lazy[node];
-		if(st != end) {
-			lazy[node*2] += lazy[node];
-			lazy[node*2+1] += lazy[node];
-		}
-
-		lazy[node] = 0;
+ll qry(int p) {
+	ll res = 0;
+	while(p>0) {
+		res += t[p];
+		p -= p & -p;
 	}
-
-	return;
-}
-
-void update_range(int node, int st, int end, int left, int right, ll diff) {
-	update_lazy(node, st, end);
-	if(left > end || right < st) {
-		return;
-	}
-
-	if(left<=st && end<=right) {
-		tree[node] += (end-st+1)*diff;
-		if(st != end) {
-			lazy[node*2] += diff;
-			lazy[node*2+1] += diff;
-		}
-		return;
-	}
-
-	update_range(node*2, st, mid, left, right, diff);
-	update_range(node*2+1, mid+1, end, left, right, diff);
-	tree[node] = tree[node*2] + tree[node*2+1];
-
-	return;
-}
-
-ll query(int node, int st, int end, int left, int right) {
-	update_lazy(node, st, end);
-	if(left > end || right < st) {
-		return 0;
-	}
-
-	if(left<=st && end<=right) {
-		return tree[node];
-	}
-
-	ll lsum = query(node*2, st, mid, left, right);
-	ll rsum = query(node*2+1, mid+1, end, left, right);
-
-	return lsum + rsum;
+	return res;
 }
 
 void sol() {
 	cin >> N;
-	for(int i=1; i<=N; ++i) cin >> arr[i];
-	cin >> M;
+	for(int i=1; i<=N; ++i) {
+		cin >> ar[i];
+		update(i, ar[i]);
+		if(i+1 <= N) update(i+1, -ar[i]);
+	}
 
-	init(1,1,N);
-	int a,b,c;
-	ll d;
-	for(int i=0; i<M; ++i) {
+	cin >> M;
+	int a;
+	int i,j,x;
+	ll k;
+	for(int tt=0; tt<M; ++tt) {
 		cin >> a;
 		if(a == 1) {
-			cin >> b >> c >> d;
-			update_range(1,1,N,b,c,d);
-		} else if(a == 2) {
-			cin >> b;
-			ll res = query(1,1,N,b,b);
-			cout << res << en;
+			cin >> i >> j >> k;
+			update(i, k);
+			if(j+1 <= N) update(j+1, -k);
+		} else {
+			cin >> x;
+			cout << qry(x) << en;
 		}
-	}	
+	}
 
 	return;
 }
