@@ -60,7 +60,6 @@ int lca(int u, int v) {
 		i++;
 	}
 
-	int d1, d2;
 	if(u != v) {
 		for(int i=h-1; i>=0; --i) {
 			if(parent[i][u] != -1 && parent[i][u] != parent[i][v]) {
