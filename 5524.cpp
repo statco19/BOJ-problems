@@ -29,13 +29,9 @@ void sol() {
 	while(n--) {
 		string s;
 		cin >> s;
-		string t = "";
-		for(int i=0; i<sz(s); ++i) {
-			if(s[i] < 97) t += s[i]+32;
-			else t += s[i];
-		}
-		cout << t << en;
-	}	
+		transform(all(s), s.begin(), ::tolower);
+		cout << s << en;	
+	}
 
 	return;
 }
