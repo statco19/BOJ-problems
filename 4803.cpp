@@ -22,77 +22,21 @@ const int INF = 0x3f3f3f3f; const int mINF = 0xc0c0c0c0;
 const ll LINF = 0x3f3f3f3f3f3f3f3f; const ll mLINF = 0xc0c0c0c0c0c0c0c0;
 int T = 1;
 
-int t;
-int parent[501];
-bool isGraph[501];
-
-int find(int x) {
-	if(parent[x] == x) {
-		return x;
-	}
-
-	return parent[x] = find(parent[x]);
-}
-
-void merge(int x, int y) {
-	x = find(x);
-	y = find(y);
-
-	if(x == y) return;
-
-	if(x < y) parent[y] = x;
-	else parent[x] = y;
-}
-
-bool isUnion(int x, int y) {
-	x = find(x);
-	y = find(y);
-
-	return x == y;
-}
 
 void sol() {
-	int n,m;
-	while(1) {
-		cin >> n >> m;
-		if(!n && !m) return;
-
-		t++;
-		mset(isGraph,0);
-		for(int i=1; i<=n; ++i) parent[i] = i;
-			
-		for(int i=0,u,v; i<m; ++i) {
-			cin >> u >> v;
-			if(!isUnion(u,v)) {
-				if(isGraph[find(u)] || isGraph[find(v)]) {
-					merge(u,v);
-					isGraph[find(u)] = 1;
-				} else {
-					merge(u,v);
-				}
-			} else {
-				isGraph[find(u)] = 1;
-			}
-		}
-
-		int ans = 0;
-		for(int i=1; i<=n; ++i) {
-			if(parent[find(i)] == i && !isGraph[i]) {
-				ans++;
-			}
-		}
-
-		if(ans) {
-			if(ans > 1) {
-				cout << "Case " << t << ": A forest of " << ans << " trees." << en;
-			} else {
-				cout << "Case " << t << ": There is one tree." << en;
-			}
-		} else {
-			cout << "Case " << t << ": No trees." << en;
+	int n,k;
+	cin >> n >> k;
+	vt<int> v = {1,n};
+	for(int i=2; i<=(int)sqrt(n); ++i) {
+		if(n % i == 0) {
+			v.pb(i);
+			if(i != n/i) v.pb(n/i);
 		}
 	}
-	
+	sort(all(v));
+	if(sz(v) < k) cout << 0 << en;
+	else cout << v[k-1] << en;
+
 	return;
 }
 
