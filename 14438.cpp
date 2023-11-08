@@ -3,6 +3,7 @@
 #define vt vector
 #define en '\n'
 #define ll long long
+#define ull unsigned long long
 #define ld long double
 #define ioa insert_or_assign
 #define umap unordered_map
@@ -15,44 +16,92 @@
 #define mset(ar, val) memset(ar, val, sizeof(ar))
 
 using namespace std;
+const int d4r[4] = {-1,0,1,0}; const int d4c[4] = {0,1,0,-1};
+const int d8r[8] = {-1,-1,0,1,1,1,0,-1}; const int d8c[8] = {0,1,1,1,0,-1,-1,-1};
 const int INF = 0x3f3f3f3f; const int mINF = 0xc0c0c0c0;
 const ll LINF = 0x3f3f3f3f3f3f3f3f; const ll mLINF = 0xc0c0c0c0c0c0c0c0;
 int T = 1;
 
-const int mx = 1e5;
 int N,M;
-int t[2*mx];
+int d[1001], ar[100001];
+int r,g;
 
 void init() {
-	for(int i=N-1; i>0; --i) t[i] = min(t[i<<1], t[i<<1|1]);
-}
-
-void update(int p, int val) {
-	for(t[p+=N]=val; p>1; p>>=1) t[p>>1] = min(t[p], t[p^1]);
-}
-
-int qry(int l, int r) {
-	int res = INF;
-	for(l+=N, r+=N; l<r; l>>=1, r>>=1) {
-		if(l&1) res = min(res, t[l++]);
-		if(r&1) res = min(res, t[--r]);
+	r = (int)sqrt(N);
+	g = N / r;
+	if(N % r != 0) g++;
+	
+	for(int i=0; i<N; ++i) {
+		d[i/r] = min(d[i/r], ar[i]);
 	}
-	return res;
+
+	return;
+}
+
+void update(int idx, int val) {
+	idx--;
+	ar[idx] = val;
+	int tg = idx / r;
+	int s = tg * r;
+	int e = min(s + r, N);
+
+	d[tg] = ar[s];
+	for(int i=s; i<e; ++i) {
+		d[tg] = min(d[tg], ar[i]);
+	}
+	return;
+}
+
+int qry(int L, int R) {
+	L--; R--;
+	if(L/r == R/r) {
+		int res = INF;
+		for(int i=L; i<R+1; ++i) {
+			res = min(res, ar[i]);
+		}
+		return res;
+	}
+	else {
+		int res = INF;
+		while(1) {
+			res = min(res, ar[L]);
+			L++;
+
+			if(L % r == 0) break;
+		}
+
+		while(1) {
+			res = min(res, ar[R]);
+			R--;
+
+			if(R % r == r-1) break;
+		}
+
+		int sg = L/r, eg = R/r;
+		for(int i=sg; i<=eg; ++i) {
+			res = min(res, d[i]);
+		}
+
+		return res;
+	}
 }
 
 void sol() {
 	cin >> N;
-	for(int i=0; i<N; ++i) cin >> t[i+N];
+	memset(d,INF,sizeof(d));
+	for(int i=0; i<N; ++i) {
+		cin >> ar[i];
+	}
 	init();
-
+	
 	cin >> M;
-	int x,i,j;
+	int a,b,c;
 	while(M--) {
-		cin >> x >> i >> j;
-		if(x == 1) {
-			update(i-1, j);
+		cin >> a >> b >> c;
+		if(a == 1) {
+			update(b, c);
 		} else {
-			cout << qry(i-1, j) << en;
+			cout << qry(b, c) << en;
 		}
 	}
 
